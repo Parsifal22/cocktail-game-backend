@@ -1,0 +1,51 @@
+# IntelliJ files
+*.iml
+*.ipr
+*.iws
+
+# Gradle files
+.gradle/
+build/
+build.gradle.tmp
+
+# Maven files
+target/
+pom.xml.tag
+pom.xml.releaseBackup
+
+# Spring Boot files
+/target/
+/.mvn/
+
+# Log files
+logs/
+*.log
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE files
+.idea/
+*.classpath
+*.project
+*.settings/
+
+# Eclipse files
+.classpath
+.project
+.settings/
+
+# Other files
+*.jar
+*.war
+*.ear
+*.zip
+*.rar
+*.7z
+*.tmp
+*.temp
+*.swp
+*.swo
+*.svn/
+*.git/
