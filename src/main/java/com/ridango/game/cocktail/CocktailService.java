@@ -9,6 +9,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Random;
 
 @Service
@@ -18,15 +19,13 @@ public class CocktailService {
 
     Cocktail.Drink cocktail;
 
-    List<String> listHints;
-
-    public Cocktail getRandomCocktail() {
+    public Cocktail.Drink getRandomCocktail() {
         RestTemplate restTemplate = new RestTemplate();
         ResponseEntity<Cocktail> response = restTemplate.getForEntity(apiUrl, Cocktail.class);
         if (response.getStatusCode() == HttpStatus.OK) {
-            this.cocktail = response.getBody().getDrinks().get(0);
+            this.cocktail = Objects.requireNonNull(response.getBody()).getDrinks().get(0);
             makeHintsList();
-            return response.getBody();
+            return this.cocktail;
         } else {
             // Handle error cases: API rate limit exceeded, network error, etc.
             throw new RuntimeException("Error fetching cocktail from API");
@@ -34,18 +33,17 @@ public class CocktailService {
     }
 
     private void makeHintsList() {
-        listHints = new ArrayList<>();
-        listHints.add("Instruction: " + this.cocktail.getStrInstructions());
-        listHints.add("Glass: " + this.cocktail.getStrGlass());
-        listHints.add("Category of cocktail: " + this.cocktail.getStrCategory());
-        listHints.add("First Ingredient: " + this.cocktail.getStrIngredient1());
-        listHints.add("Second Ingredient: " + this.cocktail.getStrIngredient2());
-        listHints.add("Third Ingredient: " + this.cocktail.getStrIngredient3());
+        cocktail.initListHints();
+        cocktail.addListHints("Instruction: " + this.cocktail.getStrInstructions());
+        cocktail.addListHints("Glass: " + this.cocktail.getStrGlass());
+        cocktail.addListHints("Category of cocktail: " + this.cocktail.getStrCategory());
+        cocktail.addListHints("First Ingredient: " + this.cocktail.getStrIngredient1());
+        cocktail.addListHints("Second Ingredient: " + this.cocktail.getStrIngredient2());
+        cocktail.addListHints("Third Ingredient: " + this.cocktail.getStrIngredient3());
     }
 
-
-    public List<String> getListHints() {
-        return this.listHints;
+    public Cocktail.Drink getCocktail() {
+        return this.cocktail;
     }
 
     public String getCocktailName() {

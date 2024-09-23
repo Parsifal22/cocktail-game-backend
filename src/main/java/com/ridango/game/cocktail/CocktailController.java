@@ -15,7 +15,7 @@ public class CocktailController {
     private CocktailService cocktailService;
 
     @GetMapping("/cocktail-info")
-    public ResponseEntity<CocktailInfo> getCocktailInfo() {
-        return new ResponseEntity<>(new CocktailInfo(cocktailService.getCocktailName(), cocktailService.getListHints()), HttpStatus.OK);
+    public ResponseEntity<Cocktail.Drink> getCocktailInfo() {
+        return new ResponseEntity<>(cocktailService.getRandomCocktail(), HttpStatus.OK);
     }
 }

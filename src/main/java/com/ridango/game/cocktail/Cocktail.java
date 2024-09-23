@@ -1,5 +1,6 @@
 package com.ridango.game.cocktail;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Cocktail {
@@ -20,6 +21,8 @@ public class Cocktail {
         private String strIngredient1;
         private String strIngredient2;
         private String strIngredient3;
+
+        private List<String> listHints;
 
         private String strCategory;
         private String strGlass;
@@ -54,6 +57,16 @@ public class Cocktail {
 
         public String getStrInstructions() {
             return strInstructions;
+        }
+
+        public List<String> getListHints() {
+            return this.listHints;
+        }
+        public void initListHints() {
+            this.listHints = new ArrayList<>();
+        }
+        public void addListHints(String value) {
+            this.listHints.add(value);
         }
 
     }

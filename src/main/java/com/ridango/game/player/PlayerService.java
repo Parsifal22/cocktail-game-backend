@@ -13,7 +13,6 @@ public class PlayerService {
     private Player player;
 
     boolean[] revealedLetters;
-    List<String> listHints;
     List<String> revealCocktail;
 
     Set<String> existingCocktails = new HashSet<>();

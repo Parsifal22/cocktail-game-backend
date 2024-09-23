@@ -1,6 +1,6 @@
 package com.ridango.game;
 
-import com.ridango.game.cocktail.CocktailInfo;
+import com.ridango.game.cocktail.Cocktail;
 import com.ridango.game.cocktail.CocktailService;
 import com.ridango.game.player.PlayerService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,38 +25,35 @@ public class CocktailGameApplication implements CommandLineRunner {
 
 	@Override public void run(String... args) throws Exception {
 		Scanner scanner = new Scanner(System.in);
-		CocktailInfo cocktailInfo;
-
+		Cocktail.Drink cocktail;
 		// Infinite loop to run the game indefinitely
 		while (true){
 
 			// Get a random cocktail from the API https://www.thecocktaildb.com/api.php and set the player object to its initial position
-			playerService.updateCocktail(cocktailService.getRandomCocktail().getDrinks().get(0));
-			cocktailInfo = new CocktailInfo(cocktailService.getCocktailName(), cocktailService.getListHints());
-
+			playerService.updateCocktail(cocktailService.getRandomCocktail());
+			cocktail = cocktailService.getRandomCocktail();
 
 			while (playerService.getPlayer().getCurrentRound() < 50) {
 
-				System.out.println("Attempts: " + playerService.getPlayer().getAttempts());
 				System.out.println("Round: " + playerService.getPlayer().getCurrentRound());
-
+				System.out.println("Attempts: " + playerService.getPlayer().getAttempts());
 				// Print the hints for the player. As attempts decrease, the number of hints displayed increases
 				for (int i = 0; i < 6 - playerService.getPlayer().getAttempts(); i++) {
-					System.out.println(cocktailInfo.getHints().get(i));
+					System.out.println(cocktail.getListHints().get(i));
 				}
 
-				System.out.println(cocktailInfo.getCocktailName());
+				System.out.println(cocktail.getStrDrink());
 
 				System.out.println(playerService.getRevealCocktail());
 
 				String guess = scanner.nextLine();
 
-				if (guess.equalsIgnoreCase(cocktailInfo.getCocktailName())) {
+				if (guess.equalsIgnoreCase(cocktailService.getCocktail().getStrDrink())) {
 					playerService.correctAnswerHandler();
-					playerService.updateCocktail(cocktailService.getRandomCocktail().getDrinks().get(0));
+					playerService.updateCocktail(cocktailService.getRandomCocktail());
 					System.out.println("Correct!");
 					System.out.println("Your score: " + playerService.getPlayer().getScore());
-					cocktailInfo = new CocktailInfo(cocktailService.getCocktailName(), cocktailService.getListHints());
+					cocktail = cocktailService.getRandomCocktail();
 				}
 				else {
 					if (playerService.getPlayer().getAttempts() > 0) {
@@ -65,10 +62,10 @@ public class CocktailGameApplication implements CommandLineRunner {
 					}
 					else {
 						System.out.println("Game Over!");
-						System.out.println("Right answer was: " + cocktailInfo.getCocktailName());
+						System.out.println("Right answer was: " + cocktail.getStrDrink());
 						playerService.gamOverHandler();
-						playerService.updateCocktail(cocktailService.getRandomCocktail().getDrinks().get(0));
-						cocktailInfo = new CocktailInfo(cocktailService.getCocktailName(), cocktailService.getListHints());
+						playerService.updateCocktail(cocktailService.getRandomCocktail());
+						cocktail = cocktailService.getRandomCocktail();
 					}
 				}
 
