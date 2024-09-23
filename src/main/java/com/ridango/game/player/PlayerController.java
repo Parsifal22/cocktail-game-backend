@@ -19,7 +19,7 @@ public class PlayerController {
 
     @GetMapping("/random-new-cocktail")
     public ResponseEntity<Player> getNewCocktail() {
-        playerService.updateCocktail(cocktailService.getRandomCocktail());
+        playerService.updateCocktail(cocktailService.getRandomCocktail().getStrDrink());
         return new ResponseEntity<Player>(playerService.getPlayer(), HttpStatus.OK);
 
     }
@@ -27,7 +27,7 @@ public class PlayerController {
     @PostMapping("/correct-answer")
     public ResponseEntity<Player> correctAnswerHandler(@RequestBody String answer) {
         playerService.correctAnswerHandler();
-        playerService.updateCocktail(cocktailService.getRandomCocktail());
+        playerService.updateCocktail(cocktailService.getRandomCocktail().getStrDrink());
         return new ResponseEntity<Player>(playerService.getPlayer(), HttpStatus.OK);
 
     }
@@ -42,7 +42,7 @@ public class PlayerController {
     @PostMapping("/game-over")
     public ResponseEntity<Player> gameOverHandler(@RequestBody String answer) {
         playerService.gamOverHandler();
-        playerService.updateCocktail(cocktailService.getRandomCocktail());
+        playerService.updateCocktail(cocktailService.getRandomCocktail().getStrDrink());
         return new ResponseEntity<Player>(playerService.getPlayer(), HttpStatus.OK);
 
     }

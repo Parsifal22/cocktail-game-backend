@@ -12,26 +12,18 @@ public class PlayerService {
     @Autowired
     private Player player;
 
-    boolean[] revealedLetters;
-    List<String> revealCocktail;
+    private boolean[] revealedLetters;
+    private List<String> revealCocktail;
 
-    Set<String> existingCocktails = new HashSet<>();
+    private Set<String> existingCocktails = new HashSet<>();
 
     public Player getPlayer() {
         return this.player;
     }
 
     // Method to update the player's cocktail with a new random drink
-    public void updateCocktail(Cocktail.Drink newCocktail) {
-        Cocktail.Drink cocktail;
-        do {
-            cocktail = newCocktail;
-        } while (existingCocktails.contains(cocktail.getStrDrink())); // Ensure the cocktail name is not already in the set
-
-        existingCocktails.add(cocktail.getStrDrink()); // Add the cocktail name to the set
-
-        setRevealCocktail(cocktail.getStrDrink().length());
-
+    public void updateCocktail(String newCocktail) {
+        setRevealCocktail(newCocktail.length());
         resetAttempts();
     }
 
@@ -128,7 +120,6 @@ public class PlayerService {
     private void setRevealCocktail(int newCoctailLength){
 
         revealCocktail = new ArrayList<String>();
-
         for (int i = 0; i < newCoctailLength; i++) {
             this.revealCocktail.add("_");
         }

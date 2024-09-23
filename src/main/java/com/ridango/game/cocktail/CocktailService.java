@@ -7,29 +7,32 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Random;
+import java.util.*;
 
 @Service
 public class CocktailService {
-    @Value("${cocktail.api.url}")
-    private String apiUrl;
+
+    private String apiUrl = "https://www.thecocktaildb.com/api/json/v1/1/random.php";
+
+    private Set<String> existingCocktails = new HashSet<>();
 
     Cocktail.Drink cocktail;
 
     public Cocktail.Drink getRandomCocktail() {
-        RestTemplate restTemplate = new RestTemplate();
-        ResponseEntity<Cocktail> response = restTemplate.getForEntity(apiUrl, Cocktail.class);
-        if (response.getStatusCode() == HttpStatus.OK) {
-            this.cocktail = Objects.requireNonNull(response.getBody()).getDrinks().get(0);
-            makeHintsList();
-            return this.cocktail;
-        } else {
-            // Handle error cases: API rate limit exceeded, network error, etc.
-            throw new RuntimeException("Error fetching cocktail from API");
-        }
+        do {
+            RestTemplate restTemplate = new RestTemplate();
+            ResponseEntity<Cocktail> response = restTemplate.getForEntity(apiUrl, Cocktail.class);
+            if (response.getStatusCode() == HttpStatus.OK) {
+                this.cocktail = Objects.requireNonNull(response.getBody()).getDrinks().get(0);
+            } else {
+                // Handle error cases: API rate limit exceeded, network error, etc.
+                throw new RuntimeException("Error fetching cocktail from API");
+            }
+        } while (existingCocktails.contains(cocktail.getStrDrink())); // Ensure the cocktail name is not already in the set
+
+        this.existingCocktails.add(cocktail.getStrDrink()); // Add the cocktail name to the set
+        makeHintsList();
+        return this.cocktail;
     }
 
     private void makeHintsList() {

@@ -30,8 +30,9 @@ public class CocktailGameApplication implements CommandLineRunner {
 		while (true){
 
 			// Get a random cocktail from the API https://www.thecocktaildb.com/api.php and set the player object to its initial position
-			playerService.updateCocktail(cocktailService.getRandomCocktail());
 			cocktail = cocktailService.getRandomCocktail();
+			playerService.updateCocktail(cocktail.getStrDrink());
+
 
 			while (playerService.getPlayer().getCurrentRound() < 50) {
 
@@ -42,7 +43,6 @@ public class CocktailGameApplication implements CommandLineRunner {
 					System.out.println(cocktail.getListHints().get(i));
 				}
 
-				System.out.println(cocktail.getStrDrink());
 
 				System.out.println(playerService.getRevealCocktail());
 
@@ -50,10 +50,10 @@ public class CocktailGameApplication implements CommandLineRunner {
 
 				if (guess.equalsIgnoreCase(cocktailService.getCocktail().getStrDrink())) {
 					playerService.correctAnswerHandler();
-					playerService.updateCocktail(cocktailService.getRandomCocktail());
+					cocktail = cocktailService.getRandomCocktail();
+					playerService.updateCocktail(cocktail.getStrDrink());
 					System.out.println("Correct!");
 					System.out.println("Your score: " + playerService.getPlayer().getScore());
-					cocktail = cocktailService.getRandomCocktail();
 				}
 				else {
 					if (playerService.getPlayer().getAttempts() > 0) {
@@ -64,8 +64,8 @@ public class CocktailGameApplication implements CommandLineRunner {
 						System.out.println("Game Over!");
 						System.out.println("Right answer was: " + cocktail.getStrDrink());
 						playerService.gamOverHandler();
-						playerService.updateCocktail(cocktailService.getRandomCocktail());
 						cocktail = cocktailService.getRandomCocktail();
+						playerService.updateCocktail(cocktail.getStrDrink());
 					}
 				}
 
